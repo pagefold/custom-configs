@@ -9,8 +9,10 @@ BIN="$CWD/bin"
 OS=$(uname)
 if [ $OS == "Darwin" ]; then
   OSTYPE="Mac"
+  PKGMGR="brew install"
 else
-  OSTYPE="*nux"
+  OSTYPE="*nix"
+  PKGMGR="sudo apt get install"
 fi
 COLWIDTH="15"
 RED=$(tput setaf 1)
