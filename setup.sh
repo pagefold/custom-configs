@@ -21,7 +21,7 @@ PURPLE=$(tput setaf 5)
 CYAN=$(tput setaf 6)
 RESET=$(tput sgr0)
 
-printf "Installing on ${OSTYPE}.\n\n" 
+printf "${YELLOW}Installing on ${OSTYPE}.${RESET}\n\n" 
 
 ## Each requirement is a separate file,
 ## so they remain independent.
