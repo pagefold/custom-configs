@@ -1,0 +1,55 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+#### ALIASES ####
+    # Fix common typos
+    alias cd..="cd .."
+    alias cd-="cd -"
+    
+    alias ip="ifconfig | grep -o \"inet [^ ]*\" | grep -v \"127.0.0.1\""
+    # Make our ls command show useful info (with colors)
+    alias ls='ls -lGFh'
+    # also modify our color scheme for ls here (for OS X)
+    export LSCOLORS=dxfxcxdxbxegedabagaccx
+
+    # Shortcuts for OS X commands (clear system log and flush dns when network acts up)
+    alias clearlog='sudo rm -rf /private/var/log/asl/*.asl'
+    alias flushdns='dscacheutil -flushcache'
+
+    # Start a simple web server with Python (for sharing files or testing HTML/Javascript apps locally without the need for Apache)
+    alias www='python -m SimpleHTTPServer'
+    # Generate documentation from JSDoc commands in Javascript files
+
+    # Set some shortcut aliases for Git commands
+    alias gitst="git status"
+    alias gitad="git add"
+    alias gitco="git commit -m"
+    alias gitre="git rebase"
+    alias gitch="git checkout"
+    alias gitpus="git push origin"
+    alias gitpul="git pull origin"
+#### /ALIASES ####
+
+#### LOAD RVM ####
+    [[ -s "~/.rvm/scripts/rvm" ]] && source "~/.rvm/scripts/rvm"  # This loads RVM into a shell session.
+#### /LOAD RVM ####
+
+#### PARSE GIT BRANCH AND CLEANLINESS ####
+    function parse_git_dirty {
+      [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+    }
+    function parse_git_branch {
+      git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/<\1$(parse_git_dirty)/"
+    }
+
+    # Git branch autocompletion
+    source /usr/local/Cellar/git/1.7.9/etc/bash_completion.d/git-completion.bash
+
+    # modify prompt
+    export PS1='\e[0m\][\@] \e[0;35m\]\w\e[0m\]\e[0;32m\]$(parse_git_branch)>\e[0m\]\n'
+#### /PARSE GIT BRANCH ####
+
+## Run tmux if it's not already running.
+## Test by checking length of $TMUX is 0.
+if [ -z $TMUX ]; then tmux; fi
