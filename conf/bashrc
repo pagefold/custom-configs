@@ -2,6 +2,30 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+#### CONSTANTS ####
+  FG_RED=$(tput setaf 1)
+  FG_GREEN=$(tput setaf 2)
+  FG_YELLOW=$(tput setaf 3)
+  FG_BLUE=$(tput setaf 4)
+  FG_PURPLE=$(tput setaf 5)
+  FG_CYAN=$(tput setaf 6)
+  FG_WHITE=$(tput setaf 7)
+  FG_DIM=$(tput dim)
+  FG_BOLD=$(tput bold)
+  FG_REVERSE=$(tput rev)
+  FG_STANDOUT=$(tput smso)
+  FG_RESET=$(tput sgr0)
+  BG_RED=$(tput setab 1)
+  BG_GREEN=$(tput setab 2)
+  BG_YELLOW=$(tput setab 3)
+  BG_BLUE=$(tput setab 4)
+  BG_PURPLE=$(tput setab 5)
+  BG_CYAN=$(tput setab 6)
+  BG_WHITE=$(tput setab 7)
+#### /CONSTANTS ####
+
+
+
 #### ALIASES ####
     # Fix common typos
     alias cd..="cd .."
@@ -36,20 +60,19 @@
 #### /LOAD RVM ####
 
 #### PARSE GIT BRANCH AND CLEANLINESS ####
-    function parse_git_dirty {
-      [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
-    }
     function parse_git_branch {
-      git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/<\1$(parse_git_dirty)/"
+      local status=$(git status)
+      local branch=$(echo $status | grep "On branch" | awk '{print $4}')
+      if [ $(echo $status | grep -c "working directory clean") -gt 0 ]; then
+        echo "$FG_GREEN $FG_DIM$FG_STANDOUT[$branch : Clean]"
+      else
+        if [ "$branch" -ne "" ]; then
+          echo "$FG_RED $FG_STANDOUT[$branch : Dirty]"
+        fi
+      fi
     }
-
-    # Git branch autocompletion
-    source /usr/local/Cellar/git/1.7.9/etc/bash_completion.d/git-completion.bash
 
     # modify prompt
-    export PS1='\e[0m\][\@] \e[0;35m\]\w\e[0m\]\e[0;32m\]$(parse_git_branch)>\e[0m\]\n'
+    export PS1='$FG_WHITE[\@]  $FG_PURPLE\w\e  $(parse_git_branch)$FG_RESET\n'
 #### /PARSE GIT BRANCH ####
 
-## Run tmux if it's not already running.
-## Test by checking length of $TMUX is 0.
-if [ -z $TMUX ]; then tmux; fi
