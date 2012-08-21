@@ -3,6 +3,7 @@
 # for examples
 
 #### CONSTANTS ####
+  FG_BLACK=$(tput setaf 0)
   FG_RED=$(tput setaf 1)
   FG_GREEN=$(tput setaf 2)
   FG_YELLOW=$(tput setaf 3)
@@ -15,6 +16,7 @@
   FG_REVERSE=$(tput rev)
   FG_STANDOUT=$(tput smso)
   FG_RESET=$(tput sgr0)
+  BG_BLACK=$(tput setab 0)
   BG_RED=$(tput setab 1)
   BG_GREEN=$(tput setab 2)
   BG_YELLOW=$(tput setab 3)
@@ -61,18 +63,26 @@
 
 #### PARSE GIT BRANCH AND CLEANLINESS ####
     function parse_git_branch {
-      local status=$(git status)
-      local branch=$(echo $status | grep "On branch" | awk '{print $4}')
-      if [ $(echo $status | grep -c "working directory clean") -gt 0 ]; then
-        echo "$FG_GREEN $FG_DIM$FG_STANDOUT[$branch : Clean]"
-      else
-        if [ "$branch" -ne "" ]; then
-          echo "$FG_RED $FG_STANDOUT[$branch : Dirty]"
+      if [ $(git rev-parse --git-dir 2>/dev/null) ]; then
+        local status="$(git status)"
+        local branch="$(echo $status | grep "On branch" | awk '{print $4}')"
+        local color=""
+        local flags=""
+        if [[ $status =~ "working directory clean" ]]; then
+          color="$FG_GREEN"
+        else
+          color="$FG_RED"
+          [[ $status =~ "Untracked files" ]] && flags+=$FG_RED"u"
+          [[ $status =~ "Changes not staged for commit" ]] && flags+=$FG_YELLOW"c"
+          [[ $status =~ "Changes to be committed" ]] && flags+=$FG_GREEN"s"
+          [[ $flags ]] && flags=" "$flags$color
         fi
+        printf "$FG_RESET$color($branch$flags)"
       fi
     }
 
-    # modify prompt
-    export PS1='$FG_WHITE[\@]  $FG_PURPLE\w\e  $(parse_git_branch)$FG_RESET\n'
 #### /PARSE GIT BRANCH ####
+
+#### MODIFY PROMPT
+export PS1="\n$FG_BLUE\@  \u@\H \n$FG_PURPLE\w\e  \$(parse_git_branch)$FG_RESET\n» "
 
