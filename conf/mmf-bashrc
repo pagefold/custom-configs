@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+function goto {
+  if [ -d ~/work/$1 ]; then
+    cd ~/work/$1
+  else
+    cd $1
+  fi
+}
