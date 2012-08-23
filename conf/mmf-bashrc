@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# For MMF
+alias sassy="cd ~/developer_vm/project/panama; sass --watch preprocess/sass/:public/css"
+
+# Quicker access to work folders
 function goto {
   if [ -d ~/work/$1 ]; then
     cd ~/work/$1
