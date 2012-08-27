@@ -22,6 +22,10 @@ set nowrap              " Do NOT wrap lines.
 set backspace=indent,eol,start  "Set backspace key to continue deleting up to next line
 set nocompatible
 syntax on               " Enable syntax highlighting
+set foldmethod=indent   " Set code folding by indentation
+set foldnestmax=10      " Fold at most 10 levels deep
+set nofoldenable        " Don't fold by default
+set foldlevel=1         " Set default fold level
 "colorscheme vibrantink  " Set the color scheme to vibrantink. This helps molokai work correctly for some strange reason. Hacky? Yes, but works.
 "colorscheme molokai     " Set the color scheme to molokai.
 colorscheme jellybeans
