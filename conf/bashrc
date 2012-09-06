@@ -55,6 +55,15 @@
     alias gitch="git checkout"
     alias gitpus="git push origin"
     alias gitpul="git pull origin"
+
+    # Create an alias function for exiting a shell, so we can exit with a status line
+    # This makes for easier distinction between switching shell sessions (ssh and such).
+    function ex {
+      printf "\n$BG_RED$FG_WHITE"
+      printf "%$(tput cols)s" "exiting shell  "
+      printf "$FG_RESET\n"
+      exit
+    }
 #### /ALIASES ####
 
 #### LOAD RVM ####
