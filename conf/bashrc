@@ -86,3 +86,13 @@
 #### MODIFY PROMPT
 export PS1="\n$FG_BLUE\@  \u@\H \n$FG_PURPLE\w\e  \$(parse_git_branch)$FG_RESET\n» "
 
+
+#### OUTPUT SOME MACHINE INFO AS A SEPARATOR LINE
+function sysinfo_banner {
+  printf "\n$BG_RED$FG_WHITE"
+  printf "%$(tput cols)s" "$(whoami) @ $(hostname)  "
+  printf "%$(tput cols)s" "$(date)  "
+  printf "%$(tput cols)s" " "
+  printf "$FG_RESET\n"
+}
+sysinfo_banner
