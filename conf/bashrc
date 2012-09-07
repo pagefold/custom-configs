@@ -93,10 +93,9 @@ function sysinfo_banner {
   printf "\n$FG_GREEN"
   seq -s "+" $(tput cols) | sed 's/[0-9]//g'
   printf "%$(expr $(tput cols) - 1)s" "$(whoami) @ $(hostname)  "
-  printf "%$(tput cols)s\n" "$(date)  "
-  printf "$FG_RESET\n"
+  printf "%$(tput cols)s$FG_RESET" "$(date)  "
 }
-sysinfo_banner
+sysinfo_banner  # execute it immediately
 
 # Create an alias function for exiting a shell, so we can exit with a status line
 # This makes for easier distinction between switching shell sessions (ssh and such).
