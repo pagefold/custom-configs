@@ -56,14 +56,6 @@
     alias gitpus="git push origin"
     alias gitpul="git pull origin"
 
-    # Create an alias function for exiting a shell, so we can exit with a status line
-    # This makes for easier distinction between switching shell sessions (ssh and such).
-    function ex {
-      printf "\n$BG_RED$FG_WHITE"
-      printf "%$(tput cols)s" "exiting shell  "
-      printf "$FG_RESET\n"
-      exit
-    }
 #### /ALIASES ####
 
 #### LOAD RVM ####
@@ -98,10 +90,19 @@ export PS1="\n$FG_BLUE\@  \u@\H \n$FG_PURPLE\w\e  \$(parse_git_branch)$FG_RESET\
 
 #### OUTPUT SOME MACHINE INFO AS A SEPARATOR LINE
 function sysinfo_banner {
-  printf "\n$BG_RED$FG_WHITE"
-  printf "%$(tput cols)s" "$(whoami) @ $(hostname)  "
-  printf "%$(tput cols)s" "$(date)  "
-  printf "%$(tput cols)s" " "
+  printf "\n$FG_GREEN"
+  seq -s "+" $(tput cols) | sed 's/[0-9]//g'
+  printf "%$(expr $(tput cols) - 1)s" "$(whoami) @ $(hostname)  "
+  printf "%$(tput cols)s\n" "$(date)  "
   printf "$FG_RESET\n"
 }
 sysinfo_banner
+
+# Create an alias function for exiting a shell, so we can exit with a status line
+# This makes for easier distinction between switching shell sessions (ssh and such).
+function ex {
+  printf "\n$FG_RED"
+  printf "%$(tput cols)s" "$(seq -s "-" $(expr $(tput cols) - 19) | sed 's/[0-9]//g') exiting shell ----"
+  printf "$FG_RESET\n"
+  exit &>/dev/null
+}
